@@ -13,11 +13,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var map: MKMapView!
     
+    var viewSelected: MKAnnotationView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation))
         map.addGestureRecognizer(gestureRecognizer)
         map.delegate = self
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "OK", style: .plain, target: nil, action: nil)
     }
 
     @objc func addAnnotation(gestureRecognizer: UIGestureRecognizer) {
@@ -48,6 +51,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return pinView
     }
     
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        viewSelected = view
+        performSegue(withIdentifier: "next", sender: nil)
+        mapView.deselectAnnotation(view.annotation, animated: false)
+    }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! ShowPhotosViewController
+        vc.passData = viewSelected?.annotation?.coordinate
+    }
 }
-
