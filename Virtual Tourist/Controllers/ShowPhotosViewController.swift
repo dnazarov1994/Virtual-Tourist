@@ -21,6 +21,7 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMap()
+        getPhotos()
     }
     
     func setupMap() {
@@ -58,6 +59,16 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction func newCollectionButton(_ sender: Any) {
+    }
+    
+    func getPhotos() {
+        Client.taskForGetRequest(url: Client.Endpoints.getPhotos(passData).url, responseType: PhotoResponse.self) { (value, error) in
+            if let error = error {
+                print(error)
+            } else if let value = value {
+                print(value)
+            }
+        }
     }
     
 }
