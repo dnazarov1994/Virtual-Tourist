@@ -20,11 +20,14 @@ class Client {
         static let paramApiKey = "api_key=\(Endpoints.apiKey)"
         
         case getPhotos(CLLocationCoordinate2D)
+        case downloadPhoto(Photo)
         
         var stringValue: String {
             switch self {
             case .getPhotos(let coordinates):
                 return Endpoints.flickrBase + "?" + Endpoints.paramApiKey + "&" + Endpoints.paramFormat + "&" + FlickrMethod.getPhotos.param + "&" + "lat=\(coordinates.latitude)&lon=\(coordinates.longitude)"
+            case .downloadPhoto(let photo):
+                return "https://farm\(photo.farm).staticflickr.com/\(photo.server)/\(photo.id)_\(photo.secret).jpg"
             }
         }
         
