@@ -61,11 +61,11 @@ class Client {
             }
             let decoder = JSONDecoder()
             do {
+                let data = cleanJSON(data: data)
                 let response = try decoder.decode(ResponseType.self, from: data)
                 DispatchQueue.main.async {
                     completion(response, nil)
                 }
-                
             } catch {
                 DispatchQueue.main.async {
                     completion(nil, error)
@@ -73,5 +73,17 @@ class Client {
             }
         }
         task.resume()
+    }
+
+    private class func cleanJSON(data: Data) -> Data {
+        var responseJSON = String(data:data, encoding: .utf8)!
+        let stringToRemove = "jsonFlickrApi("
+        guard responseJSON.contains(stringToRemove) else { return data }
+        let startIndex = responseJSON.startIndex
+        let range = startIndex...responseJSON.index(startIndex, offsetBy: stringToRemove.count - 1)
+        responseJSON.removeSubrange(range)
+        responseJSON.removeLast()
+        let data = responseJSON.data(using: .utf8)!
+        return data
     }
 }
