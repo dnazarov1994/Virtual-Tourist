@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreLocation
+import UIKit
 
 class Client {
     
@@ -18,14 +19,14 @@ class Client {
         
         static let paramFormat = "format=\(Endpoints.responseFormat)"
         static let paramApiKey = "api_key=\(Endpoints.apiKey)"
-        
-        case getPhotos(CLLocationCoordinate2D)
+       
+        case getPhotos(CLLocationCoordinate2D, Int)
         case downloadPhoto(Photo)
         
         var stringValue: String {
             switch self {
-            case .getPhotos(let coordinates):
-                return Endpoints.flickrBase + "?" + Endpoints.paramApiKey + "&" + Endpoints.paramFormat + "&" + FlickrMethod.getPhotos.param + "&" + "lat=\(coordinates.latitude)&lon=\(coordinates.longitude)"
+            case .getPhotos(let coordinates, let page):
+                return Endpoints.flickrBase + "?" + Endpoints.paramApiKey + "&" + Endpoints.paramFormat + "&" + FlickrMethod.getPhotos.param + "&" + "lat=\(coordinates.latitude)&lon=\(coordinates.longitude)" + "&page=\(page)"
             case .downloadPhoto(let photo):
                 return "https://farm\(photo.farm).staticflickr.com/\(photo.server)/\(photo.id)_\(photo.secret).jpg"
             }
@@ -77,6 +78,27 @@ class Client {
         }
         task.resume()
     }
+    
+    class func downloadPhoto(url:URL, completion:@escaping(UIImage?, Error?)->Void) {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(nil,error)
+                }
+                return
+            }
+            let image = UIImage(data: data)
+            DispatchQueue.main.async {
+                completion(image,nil)
+            }
+        }
+        task.resume()
+    }
+    
+    
 
     private class func cleanJSON(data: Data) -> Data {
         var responseJSON = String(data:data, encoding: .utf8)!

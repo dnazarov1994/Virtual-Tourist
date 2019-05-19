@@ -15,6 +15,7 @@
 		6923789D227F454400AD5907 /* ShowPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6923789C227F454400AD5907 /* ShowPhotosViewController.swift */; };
 		692378A82281FA7900AD5907 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692378A72281FA7900AD5907 /* Client.swift */; };
 		692378AA22820DC400AD5907 /* PhotoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692378A922820DC400AD5907 /* PhotoResponse.swift */; };
+		692378AC22888BE900AD5907 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692378AB22888BE900AD5907 /* ImageCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		6923789C227F454400AD5907 /* ShowPhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowPhotosViewController.swift; sourceTree = "<group>"; };
 		692378A72281FA7900AD5907 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		692378A922820DC400AD5907 /* PhotoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoResponse.swift; sourceTree = "<group>"; };
+		692378AB22888BE900AD5907 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
 		6923789B227DFC2000AD5907 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				692378AB22888BE900AD5907 /* ImageCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				692378AC22888BE900AD5907 /* ImageCollectionViewCell.swift in Sources */,
 				69237887227DFB3E00AD5907 /* MapViewController.swift in Sources */,
 				69237885227DFB3E00AD5907 /* AppDelegate.swift in Sources */,
 				6923789D227F454400AD5907 /* ShowPhotosViewController.swift in Sources */,

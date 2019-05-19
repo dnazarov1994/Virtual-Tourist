@@ -10,18 +10,44 @@ import Foundation
 import UIKit
 import MapKit
 
-class ShowPhotosViewController: UIViewController, MKMapViewDelegate {
+class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectionViewDataSource {
+    
     
     @IBOutlet weak var mapView: MKMapView!
     
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var noImagesLabel: UILabel!
+    
+    @IBOutlet weak var newCollectionButton: UIButton!
+    
     var passData: CLLocationCoordinate2D!
+    
+    var page:Int = 1
+    
+    var imagesInfo: [Photo] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMap()
         getPhotos()
+        collectionView.dataSource = self
+        noImagesLabel.isHidden = true
+        newCollectionButton.isEnabled = false
+        collectionViewSetup()
+    }
+    
+    
+    func collectionViewSetup() {
+        let layout = UICollectionViewFlowLayout()
+        let space:CGFloat = 2.0
+        let dimension = (view.frame.size.width - (2 * space)) / 3.0
+        
+        layout.minimumInteritemSpacing = space
+        layout.minimumLineSpacing = space
+        layout.itemSize = CGSize(width: dimension, height: dimension)
+            
+        collectionView.collectionViewLayout = layout
     }
     
     func setupMap() {
@@ -59,16 +85,34 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction func newCollectionButton(_ sender: Any) {
+        page = page + 1
+        getPhotos(at: page)
     }
     
-    func getPhotos() {
-        Client.taskForGetRequest(url: Client.Endpoints.getPhotos(passData).url, responseType: PhotoResponse.self) { (value, error) in
+    func getPhotos(at page: Int = 1) {
+        Client.taskForGetRequest(url: Client.Endpoints.getPhotos(passData, page).url, responseType: PhotoResponse.self) { (value, error) in
             if let error = error {
                 print(error)
             } else if let value = value {
-                print(value)
+                self.newCollectionButton.isEnabled = value.photos.page != value.photos.pages
+                let info = value.photos.photo
+                if info.count == 0 {
+                   self.noImagesLabel.isHidden = false
+                }
+                self.imagesInfo = info
+                self.collectionView.reloadData()
             }
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return imagesInfo.count > 21 ? 21:imagesInfo.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "id", for: indexPath) as! ImageCollectionViewCell
+        cell.set(photo: imagesInfo[indexPath.row])
+        return cell
     }
     
 }
