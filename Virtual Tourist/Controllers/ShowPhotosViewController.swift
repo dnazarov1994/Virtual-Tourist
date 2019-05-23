@@ -10,7 +10,13 @@ import Foundation
 import UIKit
 import MapKit
 
-class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectionViewDataSource {
+// Баги
+// 1) Есть список фото, однако появляется надпись. Шаги для воспроизведения
+// - Долистать до последней страницы с фотографиями
+
+// 2) when the pin has only 1 page, "Remove Selected Pictures" button is desabled (must be Enabled)
+
+class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     
     
     @IBOutlet weak var mapView: MKMapView!
@@ -19,9 +25,13 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     
     @IBOutlet weak var noImagesLabel: UILabel!
     
-    @IBOutlet weak var newCollectionButton: UIButton!
+    @IBOutlet weak var actionButton: UIButton!
+    
+    var action: (() -> Void)?
     
     var passData: CLLocationCoordinate2D!
+    
+    let maxPhotoCount = 21
     
     var page:Int = 1
     
@@ -31,12 +41,12 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
         super.viewDidLoad()
         setupMap()
         getPhotos()
+        action = loadNewCollection
         collectionView.dataSource = self
         noImagesLabel.isHidden = true
-        newCollectionButton.isEnabled = false
+        actionButton.isEnabled = false
         collectionViewSetup()
     }
-    
     
     func collectionViewSetup() {
         let layout = UICollectionViewFlowLayout()
@@ -46,8 +56,9 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
         layout.minimumInteritemSpacing = space
         layout.minimumLineSpacing = space
         layout.itemSize = CGSize(width: dimension, height: dimension)
-            
+        collectionView.allowsMultipleSelection = true
         collectionView.collectionViewLayout = layout
+        collectionView.delegate = self
     }
     
     func setupMap() {
@@ -65,9 +76,19 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
         mapView.isUserInteractionEnabled = false
     }
     
+    // MARK: actions for button
+    func loadNewCollection() {
+        page = page + 1
+        getPhotos(at: page)
+    }
+    
+    func removePhotos() {
+        print("remove")
+    }
+    
+    // MARK: map view
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let pin = "newpin"
-        
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: pin) as? MKPinAnnotationView
         
         if pinView == nil {
@@ -85,8 +106,7 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     }
     
     @IBAction func newCollectionButton(_ sender: Any) {
-        page = page + 1
-        getPhotos(at: page)
+        action?()
     }
     
     func getPhotos(at page: Int = 1) {
@@ -94,7 +114,7 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
             if let error = error {
                 print(error)
             } else if let value = value {
-                self.newCollectionButton.isEnabled = value.photos.page != value.photos.pages
+                self.actionButton.isEnabled = value.photos.page != value.photos.pages
                 let info = value.photos.photo
                 if info.count == 0 {
                    self.noImagesLabel.isHidden = false
@@ -106,13 +126,31 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagesInfo.count > 21 ? 21:imagesInfo.count
+        return imagesInfo.count > maxPhotoCount ? maxPhotoCount:imagesInfo.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "id", for: indexPath) as! ImageCollectionViewCell
         cell.set(photo: imagesInfo[indexPath.row])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        updateButtonState()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        updateButtonState()
+    }
+    
+    func updateButtonState() {
+        if let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty {
+            actionButton.setTitle("Remove Selected Pictures", for: .normal)
+            action = removePhotos
+        } else {
+            actionButton.setTitle("New Collection", for: .normal)
+            action = loadNewCollection
+        }
     }
     
 }

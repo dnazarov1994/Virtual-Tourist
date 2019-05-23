@@ -11,11 +11,19 @@ import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
     
+    @IBOutlet weak var opacityView: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var imageView: UIImageView!
     
+    override var isSelected: Bool {
+        didSet {
+            opacityView.isHidden = !isSelected
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        opacityView.isHidden = true
         startLoading()
     }
     
@@ -41,6 +49,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         startLoading()
+        opacityView.isHidden = true
         imageView.image = nil
     }
 }

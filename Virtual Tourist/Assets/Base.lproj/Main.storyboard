@@ -75,12 +75,20 @@
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="A20-Hm-ftz">
                                                     <rect key="frame" x="46.5" y="48.5" width="20" height="20"/>
                                                 </activityIndicatorView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3tM-ds-mde">
+                                                    <rect key="frame" x="0.0" y="0.0" width="113" height="117"/>
+                                                    <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstItem="3tM-ds-mde" firstAttribute="leading" secondItem="wVg-KK-3YR" secondAttribute="leading" id="6OP-Nr-LZz"/>
                                             <constraint firstItem="A20-Hm-ftz" firstAttribute="centerX" secondItem="LP6-u9-ZIx" secondAttribute="centerX" id="Fvd-Kb-iXJ"/>
                                             <constraint firstAttribute="trailing" secondItem="LP6-u9-ZIx" secondAttribute="trailing" id="MPy-tq-ajC"/>
+                                            <constraint firstItem="3tM-ds-mde" firstAttribute="top" secondItem="wVg-KK-3YR" secondAttribute="top" id="Rhp-fF-5Iy"/>
                                             <constraint firstItem="LP6-u9-ZIx" firstAttribute="leading" secondItem="wVg-KK-3YR" secondAttribute="leading" id="W9s-J6-eDG"/>
+                                            <constraint firstAttribute="trailing" secondItem="3tM-ds-mde" secondAttribute="trailing" id="fRk-cD-KfQ"/>
+                                            <constraint firstAttribute="bottom" secondItem="3tM-ds-mde" secondAttribute="bottom" id="gRz-6i-ERn"/>
                                             <constraint firstAttribute="bottom" secondItem="LP6-u9-ZIx" secondAttribute="bottom" id="nhi-J6-fOl"/>
                                             <constraint firstItem="A20-Hm-ftz" firstAttribute="centerY" secondItem="LP6-u9-ZIx" secondAttribute="centerY" id="yoZ-mR-0p2"/>
                                             <constraint firstItem="LP6-u9-ZIx" firstAttribute="top" secondItem="wVg-KK-3YR" secondAttribute="top" id="yxg-Se-OFb"/>
@@ -88,6 +96,7 @@
                                         <connections>
                                             <outlet property="activityIndicator" destination="A20-Hm-ftz" id="08L-I1-Z44"/>
                                             <outlet property="imageView" destination="LP6-u9-ZIx" id="Ecz-IU-pTm"/>
+                                            <outlet property="opacityView" destination="3tM-ds-mde" id="Qhb-JK-J98"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -128,9 +137,9 @@
                         <viewLayoutGuide key="safeArea" id="Ixa-40-WCH"/>
                     </view>
                     <connections>
+                        <outlet property="actionButton" destination="Fd5-34-Jwr" id="B02-dj-BzT"/>
                         <outlet property="collectionView" destination="x2z-FP-66X" id="j1Q-V5-shF"/>
                         <outlet property="mapView" destination="18m-rl-vZK" id="yeB-qA-2gu"/>
-                        <outlet property="newCollectionButton" destination="Fd5-34-Jwr" id="B02-dj-BzT"/>
                         <outlet property="noImagesLabel" destination="bbK-Be-wYg" id="koZ-Bg-CWk"/>
                     </connections>
                 </viewController>
