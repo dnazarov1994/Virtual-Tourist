@@ -18,7 +18,6 @@ import MapKit
 
 class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    
     @IBOutlet weak var mapView: MKMapView!
     
     @IBOutlet weak var collectionView: UICollectionView!
@@ -83,7 +82,18 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     }
     
     func removePhotos() {
-        print("remove")
+        guard let indexPaths = collectionView.indexPathsForSelectedItems else {
+            return
+        }
+        
+        imagesInfo = imagesInfo
+            .enumerated()
+            .filter { (index, element) -> Bool in
+                return !indexPaths.contains { $0.row == index }
+            }.map { $0.element }
+
+        collectionView.deleteItems(at: indexPaths)
+        updateButtonState()
     }
     
     // MARK: map view
@@ -102,7 +112,6 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
         }
         
         return pinView
-        
     }
     
     @IBAction func newCollectionButton(_ sender: Any) {
@@ -120,13 +129,16 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
                    self.noImagesLabel.isHidden = false
                 }
                 self.imagesInfo = info
+                if self.maxPhotoCount < info.count {
+                    self.imagesInfo.replaceSubrange(self.maxPhotoCount..<info.count, with: [])
+                }
                 self.collectionView.reloadData()
             }
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagesInfo.count > maxPhotoCount ? maxPhotoCount:imagesInfo.count
+        return imagesInfo.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
