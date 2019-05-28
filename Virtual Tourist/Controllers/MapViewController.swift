@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class MapViewController: UIViewController, MKMapViewDelegate {
     
@@ -17,16 +18,68 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation))
+        loadPins()
+        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didPress))
         map.addGestureRecognizer(gestureRecognizer)
         map.delegate = self
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "OK", style: .plain, target: nil, action: nil)
     }
+    
+    func loadPins() {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let request = NSFetchRequest<NSManagedObject>(entityName: "Pins")
+        var pins: [NSManagedObject] = []
+        do {
+            pins = try managedContext.fetch(request)
+        } catch {
+            print(error)
+        }
+        
+        pins.forEach { (object) in
+            if let longitude = object.value(forKey: "longitude") as? Double,
+                let latitude = object.value(forKey: "latitude") as? Double {
+                let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                addAnnotation(to: coordinate)
+            }
+        }
+        
+    }
+    
+    func savePin(coordinate: CLLocationCoordinate2D) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Pins", in: managedContext)! // unwrapping
+        let pin = NSManagedObject(entity: entity, insertInto: managedContext)
+        
+        pin.setValue(coordinate.latitude, forKey: "latitude")
+        pin.setValue(coordinate.longitude, forKey: "longitude")
+        
+        do {
+            try managedContext.save()
+        } catch {
+            print(error)
+        }
+    }
 
-    @objc func addAnnotation(gestureRecognizer: UIGestureRecognizer) {
+    @objc func didPress(gestureRecognizer: UIGestureRecognizer) {
         guard gestureRecognizer.state == .began else { return }
         let touchPoint = gestureRecognizer.location(in: map)
         let coordinate = map.convert(touchPoint, toCoordinateFrom: map)
+        savePin(coordinate: coordinate)
+        addAnnotation(to: coordinate)
+    }
+    
+    func addAnnotation(to coordinate: CLLocationCoordinate2D) {
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
         map.addAnnotation(annotation)
