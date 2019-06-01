@@ -8,6 +8,9 @@
 
 import Foundation
 import UIKit
+import CoreLocation
+import CoreData
+
 
 class ImageCollectionViewCell: UICollectionViewCell {
     
@@ -32,9 +35,27 @@ class ImageCollectionViewCell: UICollectionViewCell {
         stopLoading()
     }
     
-    func set(photo: Photo) {
+    func set(photo: Photo, coordinates: CLLocationCoordinate2D) {
         Client.downloadPhoto(url: Client.Endpoints.downloadPhoto(photo).url) { (image, error) in
             self.fill(with: image)
+            guard let delegate = UIApplication.shared.delegate as? AppDelegate, let image = image else {
+                return
+            }
+            let context = delegate.persistentContainer.viewContext
+            let entity = NSEntityDescription.entity(forEntityName: "PhotoData", in: context)!
+            let photoData = NSManagedObject(entity: entity, insertInto: context)
+            
+            photoData.setValue(coordinates.latitude, forKey: "latitude")
+            photoData.setValue(coordinates.longitude, forKey: "longitude")
+            let data = image.jpegData(compressionQuality: 1)
+            photoData.setValue(data, forKey: "data")
+            
+            do {
+                try context.save()
+            } catch {
+                print(error)
+            }
+            
         }
     }
     

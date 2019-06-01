@@ -34,10 +34,12 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     
     var page:Int = 1
     
+    var fetchedImages: [UIImage] = []
     var imagesInfo: [Photo] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchImages()
         setupMap()
         getPhotos()
         action = loadNewCollection
@@ -45,6 +47,11 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
         noImagesLabel.isHidden = true
         actionButton.isEnabled = false
         collectionViewSetup()
+    }
+    
+    func fetchImages() {
+        
+        
     }
     
     func collectionViewSetup() {
@@ -143,7 +150,7 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "id", for: indexPath) as! ImageCollectionViewCell
-        cell.set(photo: imagesInfo[indexPath.row])
+        cell.set(photo: imagesInfo[indexPath.row], coordinates: passData)
         return cell
     }
     
