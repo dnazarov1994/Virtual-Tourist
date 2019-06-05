@@ -38,7 +38,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         do {
             pins = try managedContext.fetch(request)
         } catch {
-            print(error)
+            show(error: error)
         }
         
         pins.forEach { (object) in
@@ -114,4 +114,5 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let vc = segue.destination as! ShowPhotosViewController
         vc.passData = viewSelected?.annotation?.coordinate
     }
+   
 }

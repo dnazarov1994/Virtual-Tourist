@@ -55,7 +55,6 @@ class ImageCollectionViewCell: UICollectionViewCell {
             } catch {
                 print(error)
             }
-            
         }
     }
     

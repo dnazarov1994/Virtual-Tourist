@@ -17,6 +17,8 @@
 		692378AA22820DC400AD5907 /* PhotoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692378A922820DC400AD5907 /* PhotoResponse.swift */; };
 		692378AC22888BE900AD5907 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692378AB22888BE900AD5907 /* ImageCollectionViewCell.swift */; };
 		692378AF229DC57400AD5907 /* DBVirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 692378AD229DC57400AD5907 /* DBVirtualTourist.xcdatamodeld */; };
+		692378D222A42A1400AD5907 /* SystemError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692378D122A42A1400AD5907 /* SystemError.swift */; };
+		692378D422A438D700AD5907 /* ShowError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692378D322A438D700AD5907 /* ShowError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		692378A922820DC400AD5907 /* PhotoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoResponse.swift; sourceTree = "<group>"; };
 		692378AB22888BE900AD5907 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		692378AE229DC57400AD5907 /* DBVirtualTourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DBVirtualTourist.xcdatamodel; sourceTree = "<group>"; };
+		692378D122A42A1400AD5907 /* SystemError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemError.swift; sourceTree = "<group>"; };
+		692378D322A438D700AD5907 /* ShowError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,7 @@
 				69237897227DFBCE00AD5907 /* Client */,
 				6923789B227DFC2000AD5907 /* View */,
 				69237896227DFB7000AD5907 /* Controllers */,
+				692378D122A42A1400AD5907 /* SystemError.swift */,
 			);
 			path = "Virtual Tourist";
 			sourceTree = "<group>";
@@ -115,6 +120,7 @@
 				6923788B227DFB4100AD5907 /* Assets.xcassets */,
 				69237888227DFB3E00AD5907 /* Main.storyboard */,
 				692378AD229DC57400AD5907 /* DBVirtualTourist.xcdatamodeld */,
+				692378D322A438D700AD5907 /* ShowError.swift */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -201,6 +207,8 @@
 				692378AC22888BE900AD5907 /* ImageCollectionViewCell.swift in Sources */,
 				69237887227DFB3E00AD5907 /* MapViewController.swift in Sources */,
 				69237885227DFB3E00AD5907 /* AppDelegate.swift in Sources */,
+				692378D222A42A1400AD5907 /* SystemError.swift in Sources */,
+				692378D422A438D700AD5907 /* ShowError.swift in Sources */,
 				692378AF229DC57400AD5907 /* DBVirtualTourist.xcdatamodeld in Sources */,
 				6923789D227F454400AD5907 /* ShowPhotosViewController.swift in Sources */,
 				692378AA22820DC400AD5907 /* PhotoResponse.swift in Sources */,

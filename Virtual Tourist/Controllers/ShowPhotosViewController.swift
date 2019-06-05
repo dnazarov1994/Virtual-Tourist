@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import MapKit
+import CoreData
 
 // Баги
 // 1) Есть список фото, однако появляется надпись. Шаги для воспроизведения
@@ -34,24 +35,56 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     
     var page:Int = 1
     
+    
     var fetchedImages: [UIImage] = []
     var imagesInfo: [Photo] = []
+    var usedPhotos: [NSManagedObject] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchImages()
         setupMap()
-        getPhotos()
+        loadPhoto()
         action = loadNewCollection
         collectionView.dataSource = self
         noImagesLabel.isHidden = true
-        actionButton.isEnabled = false
         collectionViewSetup()
     }
     
-    func fetchImages() {
+    func loadPhoto() {
+        do {
+            let data = try fetchData()
+            fetchedImages = filter(imageObjects: data)
+            actionButton.isEnabled = true
+            if fetchedImages.isEmpty {
+                getPhotos()
+            }
+        } catch {
+            getPhotos()
+        }
+    }
+    
+    func filter(imageObjects: [NSManagedObject]) -> [UIImage] {
         
+        var objects: [NSManagedObject] = []
         
+        imageObjects.forEach { (object) in
+            if let longitude = object.value(forKey: "longitude") as? Double,
+                let latitude = object.value(forKey: "latitude") as? Double,
+                longitude == passData.longitude && latitude == passData.latitude {
+                objects.append(object)
+            }
+        }
+        
+        usedPhotos = objects
+
+        var images: [UIImage] = []
+        
+        objects.forEach { object in
+            if let data = object.value(forKey: "data") as? Data, let image = UIImage(data: data) {
+                images.append(image)
+            }
+        }
+        return images
     }
     
     func collectionViewSetup() {
@@ -88,9 +121,29 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
         getPhotos(at: page)
     }
     
+    func fetchData() throws -> [NSManagedObject] {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            throw SystemError.defaultError
+        }
+        let context = appDelegate.persistentContainer.viewContext
+        
+        let request = NSFetchRequest<NSManagedObject>(entityName: "PhotoData")
+
+        return try context.fetch(request)
+    }
+        
+    
     func removePhotos() {
         guard let indexPaths = collectionView.indexPathsForSelectedItems else {
             return
+        }
+        
+        if !fetchedImages.isEmpty {
+            fetchedImages = fetchedImages
+                .enumerated()
+                .filter { (index, element) -> Bool in
+                    return !indexPaths.contains { $0.row == index }
+                }.map { $0.element }
         }
         
         imagesInfo = imagesInfo
@@ -99,6 +152,15 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
                 return !indexPaths.contains { $0.row == index }
             }.map { $0.element }
 
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        let context = appDelegate.persistentContainer.viewContext
+        
+        indexPaths.forEach { (indexPath) in
+            context.delete(usedPhotos[indexPath.row])
+        }
+        
         collectionView.deleteItems(at: indexPaths)
         updateButtonState()
     }
@@ -139,18 +201,45 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
                 if self.maxPhotoCount < info.count {
                     self.imagesInfo.replaceSubrange(self.maxPhotoCount..<info.count, with: [])
                 }
+                self.removeOldImages()
+                
                 self.collectionView.reloadData()
             }
         }
     }
     
+    func removeOldImages() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        let context = appDelegate.persistentContainer.viewContext
+        do {
+            let data = try fetchData()
+            data.forEach { (object) in
+                if let longitude = object.value(forKey: "longitude") as? Double, let latitude = object.value(forKey: "latitude") as? Double,
+                    longitude == passData.longitude, latitude  == passData.latitude
+                    
+                {
+                    context.delete(object)
+                }
+            }
+        } catch {
+            show(error: error)
+        }
+        
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagesInfo.count
+        return imagesInfo.isEmpty ? fetchedImages.count:imagesInfo.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "id", for: indexPath) as! ImageCollectionViewCell
-        cell.set(photo: imagesInfo[indexPath.row], coordinates: passData)
+        if !imagesInfo.isEmpty {
+            cell.set(photo: imagesInfo[indexPath.row], coordinates: passData)
+        } else {
+            cell.fill(with: fetchedImages[indexPath.row])
+        }
         return cell
     }
     
