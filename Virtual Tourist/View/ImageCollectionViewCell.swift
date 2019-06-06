@@ -18,6 +18,10 @@ class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var imageView: UIImageView!
     
+    private var number: Int = 0
+    
+    weak var delegate: ImageCellDelegate?
+    
     override var isSelected: Bool {
         didSet {
             opacityView.isHidden = !isSelected
@@ -35,26 +39,11 @@ class ImageCollectionViewCell: UICollectionViewCell {
         stopLoading()
     }
     
-    func set(photo: Photo, coordinates: CLLocationCoordinate2D) {
+    func set(photo: Photo, with number: Int) {
+        self.number = number
         Client.downloadPhoto(url: Client.Endpoints.downloadPhoto(photo).url) { (image, error) in
             self.fill(with: image)
-            guard let delegate = UIApplication.shared.delegate as? AppDelegate, let image = image else {
-                return
-            }
-            let context = delegate.persistentContainer.viewContext
-            let entity = NSEntityDescription.entity(forEntityName: "PhotoData", in: context)!
-            let photoData = NSManagedObject(entity: entity, insertInto: context)
-            
-            photoData.setValue(coordinates.latitude, forKey: "latitude")
-            photoData.setValue(coordinates.longitude, forKey: "longitude")
-            let data = image.jpegData(compressionQuality: 1)
-            photoData.setValue(data, forKey: "data")
-            
-            do {
-                try context.save()
-            } catch {
-                print(error)
-            }
+            self.delegate?.didLoad(image: image, at: number)
         }
     }
     

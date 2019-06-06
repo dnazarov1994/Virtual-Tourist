@@ -11,12 +11,6 @@ import UIKit
 import MapKit
 import CoreData
 
-// Баги
-// 1) Есть список фото, однако появляется надпись. Шаги для воспроизведения
-// - Долистать до последней страницы с фотографиями
-
-// 2) when the pin has only 1 page, "Remove Selected Pictures" button is desabled (must be Enabled)
-
 class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
@@ -29,14 +23,15 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     
     var action: (() -> Void)?
     
+    var isNewCollectionButtonEnable: Bool = true
+    
     var passData: CLLocationCoordinate2D!
     
     let maxPhotoCount = 21
     
     var page:Int = 1
     
-    
-    var fetchedImages: [UIImage] = []
+    var fetchedImages: [UIImage?] = []
     var imagesInfo: [Photo] = []
     var usedPhotos: [NSManagedObject] = []
     
@@ -115,7 +110,6 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
         mapView.isUserInteractionEnabled = false
     }
     
-    // MARK: actions for button
     func loadNewCollection() {
         page = page + 1
         getPhotos(at: page)
@@ -165,7 +159,6 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
         updateButtonState()
     }
     
-    // MARK: map view
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let pin = "newpin"
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: pin) as? MKPinAnnotationView
@@ -190,12 +183,12 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     func getPhotos(at page: Int = 1) {
         Client.taskForGetRequest(url: Client.Endpoints.getPhotos(passData, page).url, responseType: PhotoResponse.self) { (value, error) in
             if let error = error {
-                print(error)
+                self.show(error: error)
             } else if let value = value {
-                self.actionButton.isEnabled = value.photos.page != value.photos.pages
                 let info = value.photos.photo
                 if info.count == 0 {
-                   self.noImagesLabel.isHidden = false
+                    self.actionButton.isEnabled = false
+                    self.noImagesLabel.isHidden = false
                 }
                 self.imagesInfo = info
                 if self.maxPhotoCount < info.count {
@@ -203,6 +196,8 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
                 }
                 self.removeOldImages()
                 
+                let embed: UIImage? = nil
+                self.fetchedImages = Array(repeating: embed, count: self.maxPhotoCount)
                 self.collectionView.reloadData()
             }
         }
@@ -223,6 +218,7 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
                     context.delete(object)
                 }
             }
+            self.fetchedImages.removeAll()
         } catch {
             show(error: error)
         }
@@ -230,15 +226,25 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagesInfo.isEmpty ? fetchedImages.count:imagesInfo.count
+        if !imagesInfo.isEmpty {
+            return imagesInfo.count
+        }
+        let hasCachedImages = fetchedImages.contains { (image) -> Bool in
+            return image != nil
+        }
+        if hasCachedImages {
+            return fetchedImages.count
+        }
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "id", for: indexPath) as! ImageCollectionViewCell
-        if !imagesInfo.isEmpty {
-            cell.set(photo: imagesInfo[indexPath.row], coordinates: passData)
-        } else {
-            cell.fill(with: fetchedImages[indexPath.row])
+        cell.delegate = self
+        if fetchedImages.count > 0, let image = fetchedImages[indexPath.row] {
+            cell.fill(with: image)
+        } else if !imagesInfo.isEmpty {
+            cell.set(photo: imagesInfo[indexPath.row], with: indexPath.row)
         }
         return cell
     }
@@ -253,12 +259,42 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
     
     func updateButtonState() {
         if let selectedItems = collectionView.indexPathsForSelectedItems, !selectedItems.isEmpty {
+            isNewCollectionButtonEnable = actionButton.isEnabled
+            actionButton.isEnabled = true
             actionButton.setTitle("Remove Selected Pictures", for: .normal)
             action = removePhotos
         } else {
+            actionButton.isEnabled = isNewCollectionButtonEnable
             actionButton.setTitle("New Collection", for: .normal)
             action = loadNewCollection
         }
     }
     
+}
+
+extension ShowPhotosViewController: ImageCellDelegate {
+    func didLoad(image: UIImage?, at number: Int) {
+        fetchedImages[number] = image
+        save(image: image)
+    }
+    
+    func save(image: UIImage?) {
+        guard let delegate = UIApplication.shared.delegate as? AppDelegate, let image = image else {
+            return
+        }
+        let context = delegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "PhotoData", in: context)!
+        let photoData = NSManagedObject(entity: entity, insertInto: context)
+        
+        photoData.setValue(passData.latitude, forKey: "latitude")
+        photoData.setValue(passData.longitude, forKey: "longitude")
+        let data = image.jpegData(compressionQuality: 1)
+        photoData.setValue(data, forKey: "data")
+        
+        do {
+            try context.save()
+        } catch {
+            show(error: error)
+        }
+    }
 }

@@ -19,6 +19,7 @@
 		692378AF229DC57400AD5907 /* DBVirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 692378AD229DC57400AD5907 /* DBVirtualTourist.xcdatamodeld */; };
 		692378D222A42A1400AD5907 /* SystemError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692378D122A42A1400AD5907 /* SystemError.swift */; };
 		692378D422A438D700AD5907 /* ShowError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692378D322A438D700AD5907 /* ShowError.swift */; };
+		692378D622A8F09400AD5907 /* ImageCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692378D522A8F09400AD5907 /* ImageCellDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		692378AE229DC57400AD5907 /* DBVirtualTourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DBVirtualTourist.xcdatamodel; sourceTree = "<group>"; };
 		692378D122A42A1400AD5907 /* SystemError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemError.swift; sourceTree = "<group>"; };
 		692378D322A438D700AD5907 /* ShowError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowError.swift; sourceTree = "<group>"; };
+		692378D522A8F09400AD5907 /* ImageCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCellDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,12 +73,10 @@
 				6923789A227DFC0A00AD5907 /* Assets */,
 				69237890227DFB4100AD5907 /* Info.plist */,
 				69237884227DFB3E00AD5907 /* AppDelegate.swift */,
-				69237899227DFBF800AD5907 /* Responses */,
-				69237898227DFBE800AD5907 /* Requests */,
+				69237899227DFBF800AD5907 /* Response */,
 				69237897227DFBCE00AD5907 /* Client */,
 				6923789B227DFC2000AD5907 /* View */,
 				69237896227DFB7000AD5907 /* Controllers */,
-				692378D122A42A1400AD5907 /* SystemError.swift */,
 			);
 			path = "Virtual Tourist";
 			sourceTree = "<group>";
@@ -98,19 +98,12 @@
 			path = Client;
 			sourceTree = "<group>";
 		};
-		69237898227DFBE800AD5907 /* Requests */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Requests;
-			sourceTree = "<group>";
-		};
-		69237899227DFBF800AD5907 /* Responses */ = {
+		69237899227DFBF800AD5907 /* Response */ = {
 			isa = PBXGroup;
 			children = (
 				692378A922820DC400AD5907 /* PhotoResponse.swift */,
 			);
-			path = Responses;
+			path = Response;
 			sourceTree = "<group>";
 		};
 		6923789A227DFC0A00AD5907 /* Assets */ = {
@@ -121,6 +114,7 @@
 				69237888227DFB3E00AD5907 /* Main.storyboard */,
 				692378AD229DC57400AD5907 /* DBVirtualTourist.xcdatamodeld */,
 				692378D322A438D700AD5907 /* ShowError.swift */,
+				692378D122A42A1400AD5907 /* SystemError.swift */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -129,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				692378AB22888BE900AD5907 /* ImageCollectionViewCell.swift */,
+				692378D522A8F09400AD5907 /* ImageCellDelegate.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -204,6 +199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				692378D622A8F09400AD5907 /* ImageCellDelegate.swift in Sources */,
 				692378AC22888BE900AD5907 /* ImageCollectionViewCell.swift in Sources */,
 				69237887227DFB3E00AD5907 /* MapViewController.swift in Sources */,
 				69237885227DFB3E00AD5907 /* AppDelegate.swift in Sources */,

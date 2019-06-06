@@ -58,7 +58,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let managedContext = appDelegate.persistentContainer.viewContext
         
-        let entity = NSEntityDescription.entity(forEntityName: "Pins", in: managedContext)! // unwrapping
+        let entity = NSEntityDescription.entity(forEntityName: "Pins", in: managedContext)!
         let pin = NSManagedObject(entity: entity, insertInto: managedContext)
         
         pin.setValue(coordinate.latitude, forKey: "latitude")
@@ -67,7 +67,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         do {
             try managedContext.save()
         } catch {
-            print(error)
+            show(error: error)
         }
     }
 
