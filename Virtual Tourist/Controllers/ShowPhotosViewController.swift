@@ -151,6 +151,10 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
         }
         let context = appDelegate.persistentContainer.viewContext
         
+        if usedPhotos.isEmpty, let data = try? fetchData() {
+            _ = filter(imageObjects: data)
+        }
+        
         indexPaths.forEach { (indexPath) in
             context.delete(usedPhotos[indexPath.row])
         }
