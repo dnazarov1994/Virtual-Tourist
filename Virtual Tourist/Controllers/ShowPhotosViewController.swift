@@ -158,7 +158,7 @@ class ShowPhotosViewController: UIViewController, MKMapViewDelegate, UICollectio
         indexPaths.forEach { (indexPath) in
             context.delete(usedPhotos[indexPath.row])
         }
-        
+        try? context.save()
         collectionView.deleteItems(at: indexPaths)
         updateButtonState()
     }
