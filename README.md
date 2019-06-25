@@ -20,6 +20,7 @@ Tapping the back button returns the user to the Map view.
 If the user selects a pin that already has a photo album then the Photo Album view displays the album and the New Collection button is enabled
 
 ### Data from network resources
-The app using data from the Flickr API
+The app using data from the Flickr API: "https://api.flickr.com/services/rest"
 
 ### Error handling
+If the submission fails to post the data to the server, then the user see an alert with an error message describing the failure.
