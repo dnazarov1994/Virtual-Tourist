@@ -17,7 +17,7 @@ Once the images have all been downloaded, the app enables the New Collection but
 Users are able to remove photos from an album by tapping them. Pictures are flowed up to fill the space vacated by the removed photo.
 All changes to the photo album are automatically made persistent.
 Tapping the back button returns the user to the Map view.
-If the user selects a pin that already has a photo album then the Photo Album view displays the album and the New Collection button is enabled
+If the user selects a pin that already has a photo album then the Photo Album view displays the album and the New Collection button is enabled.
 
 ### Data from network resources
 The app using data from the Flickr API: "https://api.flickr.com/services/rest"
