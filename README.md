@@ -1,5 +1,5 @@
 # Virtual Tourist
-This app allows users to drop pins on a map, as if they were stops on a tour. Users are able to download pictures for the location and persist both the pictures, and the association of the pictures with the pin.
+This app allows users to drop pins on a map as if they were stops on a tour. Users are able to download pictures for the location and persist both the pictures and the association of the pictures with the pin.
 
 ### Architecture 
 - Travel Locations Map View: Allows the user to drop pins around the world
