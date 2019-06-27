@@ -24,3 +24,8 @@ The app using data from the Flickr API: "https://api.flickr.com/services/rest"
 
 ### Error handling
 If the submission fails to post the data to the server, then the user sees an alert with an error message describing the failure.
+
+### Requirements
+
+- Xcode 9.2
+- Swift 4.0
