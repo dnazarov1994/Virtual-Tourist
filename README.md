@@ -19,7 +19,7 @@ All changes to the photo album are automatically made persistent.
 Tapping the back button returns the user to the Map view.
 If the user selects a pin that already has a photo album then the Photo Album view displays the album and the New Collection button is enabled.
 
-### Data from network resources
+### API
 The app using data from the Flickr API: "https://api.flickr.com/services/rest"
 
 ### Error handling
