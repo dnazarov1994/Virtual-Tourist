@@ -1,11 +1,11 @@
 # Virtual Tourist
 This app allows users to drop pins on a map as if they were stops on a tour. Users are able to download pictures for the location and persist both the pictures and the association of the pictures with the pin.
 
-### Architecture 
+## Architecture 
 - Travel Locations Map View: Allows the user to drop pins around the world
 - Photo Album View: Allows the users to download and edit an album for a location
 
-### Functionality
+## Functionality
 When the user opens the app for the first time, the Map View appears. The user is able to zoom and scroll around the map using standard pinch and drag gestures.
 Tapping and holding the map drops a new pin. Users can place any number of pins on the map.
 When a pin is tapped, the app navigates to the Photo Album view associated with the pin.
@@ -19,13 +19,13 @@ All changes to the photo album are automatically made persistent.
 Tapping the back button returns the user to the Map view.
 If the user selects a pin that already has a photo album then the Photo Album view displays the album and the New Collection button is enabled.
 
-### API
+## API
 The app using data from the Flickr API: "https://api.flickr.com/services/rest"
 
-### Error handling
+## Error handling
 If the submission fails to post the data to the server, then the user sees an alert with an error message describing the failure.
 
-### Requirements
+## Requirements
 
 - Xcode 9.2
 - Swift 4.0
