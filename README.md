@@ -3,6 +3,9 @@ This app allows users to drop pins on a map as if they were stops on a tour. Use
 
 <img width="540" alt="Screen Shot 2019-08-18 at 9 16 34 PM" src="https://user-images.githubusercontent.com/46335329/63233373-d1aa5b00-c1fd-11e9-85c1-5dd76a928468.png">
 
+<img width="540" alt="Screen Shot 2019-08-18 at 9 17 42 PM" src="https://user-images.githubusercontent.com/46335329/63233414-09b19e00-c1fe-11e9-9986-f76fde1af093.png">
+
+
 ## Architecture 
 - Travel Locations Map View: Allows the user to drop pins around the world
 - Photo Album View: Allows the users to download and edit an album for a location
