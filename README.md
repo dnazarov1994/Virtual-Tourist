@@ -77,7 +77,7 @@ If the submission fails to post the data to the server, then the user sees an al
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
-    }
+ }
 ```
 
 ## Requirements
