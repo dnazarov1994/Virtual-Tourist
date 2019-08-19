@@ -71,6 +71,14 @@ The app using data from the Flickr API: "https://api.flickr.com/services/rest"
 
 ## Error handling
 If the submission fails to post the data to the server, then the user sees an alert with an error message describing the failure.
+```
+ func show(error:Error) {
+        let alert = UIAlertController(title: "ERROR", message: error.localizedDescription, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+```
 
 ## Requirements
 
