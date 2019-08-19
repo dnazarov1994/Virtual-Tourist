@@ -5,11 +5,6 @@ This app allows users to drop pins on a map as if they were stops on a tour. Use
 
 <img width="540" alt="Screen Shot 2019-08-18 at 9 17 42 PM" src="https://user-images.githubusercontent.com/46335329/63233414-09b19e00-c1fe-11e9-9986-f76fde1af093.png">
 
-
-## Architecture 
-- Travel Locations Map View: Allows the user to drop pins around the world
-- Photo Album View: Allows the users to download and edit an album for a location
-
 ## Functionality
 When the user opens the app for the first time, the Map View appears. The user is able to zoom and scroll around the map using standard pinch and drag gestures.
 Tapping and holding the map drops a new pin. Users can place any number of pins on the map.
@@ -23,6 +18,11 @@ Users are able to remove photos from an album by tapping them. Pictures are flow
 All changes to the photo album are automatically made persistent.
 Tapping the back button returns the user to the Map view.
 If the user selects a pin that already has a photo album then the Photo Album view displays the album and the New Collection button is enabled.
+
+## App Implementation 
+- Travel Locations Map View: Allows the user to drop pins around the world
+- Photo Album View: Allows the users to download and edit an album for a location
+
 
 ## API
 The app using data from the Flickr API: "https://api.flickr.com/services/rest"
