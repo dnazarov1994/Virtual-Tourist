@@ -20,8 +20,50 @@ Tapping the back button returns the user to the Map view.
 If the user selects a pin that already has a photo album then the Photo Album view displays the album and the New Collection button is enabled.
 
 ## App Implementation 
+The app has two view controller scenes:
 - Travel Locations Map View: Allows the user to drop pins around the world
+```
+ func loadPins() {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let request = NSFetchRequest<NSManagedObject>(entityName: "Pins")
+        var pins: [NSManagedObject] = []
+        do {
+            pins = try managedContext.fetch(request)
+        } catch {
+            show(error: error)
+        }
+        
+        pins.forEach { (object) in
+            if let longitude = object.value(forKey: "longitude") as? Double,
+                let latitude = object.value(forKey: "latitude") as? Double {
+                let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                addAnnotation(to: coordinate)
+            }
+        }
+        
+    }
+```
 - Photo Album View: Allows the users to download and edit an album for a location
+```
+func loadPhoto() {
+        do {
+            let data = try fetchData()
+            fetchedImages = filter(imageObjects: data)
+            actionButton.isEnabled = true
+            if fetchedImages.isEmpty {
+                getPhotos()
+            }
+        } catch {
+            getPhotos()
+        }
+    }
+```
 
 
 ## API
