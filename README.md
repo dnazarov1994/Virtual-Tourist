@@ -83,4 +83,4 @@ If the submission fails to post the data to the server, then the user sees an al
 ## Requirements
 
 - Xcode 9.2
-- Swift 4.0
+- Swift 4.2
