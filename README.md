@@ -1,4 +1,4 @@
-## Virtual Tourist
+# Virtual Tourist
 This app allows users to drop pins on a map as if they were stops on a tour. Users are able to download pictures for the location and persist both the pictures and the association of the pictures with the pin.
 
 <img width="540" alt="Screen Shot 2019-08-18 at 9 16 34 PM" src="https://user-images.githubusercontent.com/46335329/63233373-d1aa5b00-c1fd-11e9-85c1-5dd76a928468.png">
